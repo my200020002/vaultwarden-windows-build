@@ -122,12 +122,18 @@ jobs:
         run: |
           mkdir builds -Force
           move Vaultwarden_*.zip builds/
+          
+      - name: 上传构建产物（可覆盖更新）
+        uses: actions/upload-artifact@v7
+        with:
+          name: Vaultwarden-${{ steps.get_version.outputs.vaultwarden_version }}-${{ steps.build_time.outputs.timestamp }}
+          path: builds/Vaultwarden_${{ steps.get_version.outputs.vaultwarden_version }}_${{ steps.get_version.outputs.web_vault_version }}_${{ steps.build_time.outputs.timestamp }}.zip
 
-      - name: 提交并推送构建文件
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git pull
-          git add builds/*
-          git commit -m "Vaultwarden ${{ steps.get_version.outputs.vaultwarden_version }} - Web-Vault ${{ steps.get_version.outputs.web_vault_version }} - ${{ steps.build_time.outputs.timestamp }}" || echo "No changes to commit."
-          git push origin HEAD:${{ github.ref }}
+      # - name: 提交并推送构建文件
+      #   run: |
+      #     git config user.name "github-actions[bot]"
+      #     git config user.email "github-actions[bot]@users.noreply.github.com"
+      #     git pull
+      #     git add builds/*
+      #     git commit -m "Vaultwarden ${{ steps.get_version.outputs.vaultwarden_version }} - Web-Vault ${{ steps.get_version.outputs.web_vault_version }} - ${{ steps.build_time.outputs.timestamp }}" || echo "No changes to commit."
+      #     git push origin HEAD:${{ github.ref }}
